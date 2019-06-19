@@ -14,6 +14,7 @@ class App extends Component {
   }
 
   bindMethods() {
+    // class method not auto bind.
     this.handleLogin = this.handleLogin.bind(this);
   }
 
@@ -32,8 +33,12 @@ class App extends Component {
   }
 
   handleLogin() {
-    let loginState = this.state.isLoggedIn ? false:true;
-    this.setState({isLoggedIn: loginState});
+    this.setState((prevState) => {
+      console.log(prevState);
+      return {
+        isLoggedIn: prevState.isLoggedIn ? false:true,
+      }
+    });
   }
   
   handleIn() {
