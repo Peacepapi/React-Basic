@@ -1,27 +1,46 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+
+  constructor() {
+    // add class methods
+    super();
+
+    this.state = {
+      isLoggedIn: true
+    };
+    this.bindMethods();
+  }
+
+  bindMethods() {
+    this.handleLogin = this.handleLogin.bind(this);
+  }
+
   render() {
+    let status = this.state.isLoggedIn ? "in":"out";
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <h2 
+          onMouseEnter={this.handleIn}
+          onMouseOut={this.handleOut}
+        >You are currently logged {status}</h2>
+        <button onClick={this.handleLogin}>Log {status === "in" ? "out":"in"}</button>
       </div>
     );
+  }
+
+  handleLogin() {
+    let loginState = this.state.isLoggedIn ? false:true;
+    this.setState({isLoggedIn: loginState});
+  }
+  
+  handleIn() {
+    console.log('im in ttheree');
+  }
+  handleOut() {
+    console.log('im outta ttheree');
   }
 }
 
