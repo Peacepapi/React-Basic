@@ -13,6 +13,9 @@ class App extends Component {
       swapiData: {},
       firstName: "",
       lastName: "",
+      isDone: false,
+      gender: "",
+      favColor: "",
     };
     this.bindMethods();
   }
@@ -50,7 +53,8 @@ class App extends Component {
     return (
       <div className="App">
         
-            {this.state.loading ? <h2>Loading...</h2>:
+            {this.state.loading ? <h2>Loading...</h2>
+            :
             <div>
               <h2 onMouseEnter={this.handleIn} onMouseOut={this.handleOut}
                 >You are currently logged {status}, {this.state.swapiData.name}</h2>
@@ -59,6 +63,27 @@ class App extends Component {
               <input onChange={this.handleFormChange} name="firstName" value={this.state.firstName} type="text" placaeholder="Type something..."></input>
               <input onChange={this.handleFormChange} name="lastName" value={this.state.lastName} type="text" placaeholder="Type something..."></input>              
               <h2>{this.state.firstName} {this.state.lastName}</h2>
+              <textarea value="Write something" />
+              <br></br>
+              <input onChange={this.handleFormChange} name="isDone" checked={this.state.isDone} type="checkbox"></input>
+              <input onChange={this.handleFormChange} name="gender" value="female" type="radio"></input>
+              <label>Female</label>   
+              <input onChange={this.handleFormChange} name="gender" value="male" type="radio"></input>           
+              <label>Male</label>
+              <br></br>
+              <h2>you are {this.state.gender}</h2>
+              <label>Choose favorite color</label>
+              <select
+                value={this.state.favColor}
+                onChange={this.handleFormChange}
+                name="favColor">
+                <option value=""></option>
+                <option value="blue">blue</option>
+                <option value="red">red</option>
+                <option value="turtle">turtle</option>
+                <option value="black">black</option>
+              </select>
+              <h2>Favorite color is {this.state.favColor}</h2>
             </div>
             }
         
@@ -82,10 +107,13 @@ class App extends Component {
     console.log('im outta ttheree');
   }
   handleFormChange(e) {
-    const {name, value} = e.target
-    this.setState({
-      [name]: value
-    })
+    const {name, value, checked, type} = e.target;
+    console.log(name);
+    console.log(value);
+    if(type === 'checkbox')
+      this.setState({[name]: checked})
+    else
+      this.setState({[name]: value})
   }
 }
 
