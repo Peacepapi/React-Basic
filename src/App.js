@@ -8,9 +8,27 @@ class App extends Component {
     super();
 
     this.state = {
-      isLoggedIn: true
+      isLoggedIn: true,
+      swapiData: {}
     };
     this.bindMethods();
+  }
+
+  /*
+  is invoked immediately after a component is mounted (inserted into the tree). 
+  Initialization that requires DOM nodes should go here. 
+  If you need to load data from a remote endpoint, 
+  this is a good place to instantiate the network request.
+  This method is a good place to set up any subscriptions.
+  */
+  componentDidMount() {
+    fetch("https://swapi.co/api/people/1")
+      .then(response => {
+        return response.json()
+      }).then(data => {
+        this.setState({swapiData: data})
+        console.log(this.state);
+      })
   }
 
   bindMethods() {
@@ -26,7 +44,7 @@ class App extends Component {
         <h2 
           onMouseEnter={this.handleIn}
           onMouseOut={this.handleOut}
-        >You are currently logged {status}</h2>
+        >You are currently logged {status}, {this.state.swapiData.name}</h2>
         <button onClick={this.handleLogin}>Log {status === "in" ? "out":"in"}</button>
       </div>
     );
@@ -36,7 +54,7 @@ class App extends Component {
     this.setState((prevState) => {
       console.log(prevState);
       return {
-        isLoggedIn: prevState.isLoggedIn ? false:true,
+        isLoggedIn: !prevState.isLoggedIn,
       }
     });
   }
