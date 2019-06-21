@@ -8,8 +8,11 @@ class App extends Component {
     super();
 
     this.state = {
+      loading: false,
       isLoggedIn: true,
-      swapiData: {}
+      swapiData: {},
+      firstName: "",
+      lastName: "",
     };
     this.bindMethods();
   }
@@ -22,18 +25,23 @@ class App extends Component {
   This method is a good place to set up any subscriptions.
   */
   componentDidMount() {
-    fetch("https://swapi.co/api/people/1")
+    this.setState({loading: true});
+    setTimeout(() => {
+      fetch("https://swapi.co/api/people/1")
       .then(response => {
         return response.json()
       }).then(data => {
-        this.setState({swapiData: data})
+        this.setState({swapiData: data, loading: false})
         console.log(this.state);
       })
+    }, 2000)
+    
   }
 
   bindMethods() {
     // class method not auto bind.
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleFormChange = this.handleFormChange.bind(this);
   }
 
   render() {
@@ -41,11 +49,19 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h2 
-          onMouseEnter={this.handleIn}
-          onMouseOut={this.handleOut}
-        >You are currently logged {status}, {this.state.swapiData.name}</h2>
-        <button onClick={this.handleLogin}>Log {status === "in" ? "out":"in"}</button>
+        
+            {this.state.loading ? <h2>Loading...</h2>:
+            <div>
+              <h2 onMouseEnter={this.handleIn} onMouseOut={this.handleOut}
+                >You are currently logged {status}, {this.state.swapiData.name}</h2>
+              <button onClick={this.handleLogin}>Log {status === "in" ? "out":"in"}</button>
+              <br></br>
+              <input onChange={this.handleFormChange} name="firstName" value={this.state.firstName} type="text" placaeholder="Type something..."></input>
+              <input onChange={this.handleFormChange} name="lastName" value={this.state.lastName} type="text" placaeholder="Type something..."></input>              
+              <h2>{this.state.firstName} {this.state.lastName}</h2>
+            </div>
+            }
+        
       </div>
     );
   }
@@ -64,6 +80,12 @@ class App extends Component {
   }
   handleOut() {
     console.log('im outta ttheree');
+  }
+  handleFormChange(e) {
+    const {name, value} = e.target
+    this.setState({
+      [name]: value
+    })
   }
 }
 
